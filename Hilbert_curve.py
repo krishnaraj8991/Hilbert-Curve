@@ -13,18 +13,8 @@ def printFull():
     global full_img
     global delay
     global animation
-    # global count
-    # global out
-    # global version
-    # version+=1
-    # filename='hilbertCurve/order'+str(count)+'/'+str(version)+'.jpg'
-    # with imageio.get_writer('movie'+str(count)+str(c)+'.gif', mode='I') as writer:
     if animation:
         cv2.imshow("img",full_img)
-        # writer.append_data(full_img)
-        # cv2.imwrite(filename,full_img)
-        # if version%count==0:
-        #     out.write(img)
         k=cv2.waitKey(delay)
         if k==ord('q'):
             exit()
@@ -38,7 +28,6 @@ def A(img):
     global r,g,b   
     global full_img
     img[:,:]=(0,0,0)
-    # print(img.shape)
     height=img.shape[0]
     width=img.shape[1]
     points=[]
@@ -47,16 +36,11 @@ def A(img):
     points.append((int(height*3/4),int(width*1/4)))
     points.append((int(height*3/4),int(width*3/4)))
     
-    # for i in range(3):
-    #     cv2.line(img,points[i],points[i+1],(b,g,r),thickness_const)
-    #     # cv2.imshow("img",img)
-    #     printFull()
     return points
 def B(img):
     global thickness_const
     global r,g,b  
     img[:,:]=(0,0,0)
-    # print(img.shape)
     height=img.shape[0]
     width=img.shape[1]
     points=[]
@@ -64,18 +48,12 @@ def B(img):
     points.append((int(height*1/4),int(width*1/4)))
     points.append((int(height*1/4),int(width*3/4)))
     points.append((int(height*3/4),int(width*3/4)))
-    
-    # for i in range(3):
-    #     cv2.line(img,points[i],points[i+1],(b,g,r),thickness_const)
-    #     # cv2.imshow("img",img)
-    #     printFull()
     return points
 def C(img):
     global thickness_const
     global full_img
     global r,g,b  
     img[:,:]=(0,0,0)
-    # print(img.shape)
     height=img.shape[0]
     width=img.shape[1]
     points=[]
@@ -84,17 +62,12 @@ def C(img):
     points.append((int(height*1/4),int(width*3/4)))
     points.append((int(height*1/4),int(width*1/4)))
     
-    # for i in range(3):
-    #     cv2.line(img,points[i],points[i+1],(b,g,r),thickness_const)
-    #     # cv2.imshow("img",img)
-    #     printFull()
     return points
 def D(img):
     global full_img
     global thickness_const
     global r,g,b  
     img[:,:]=(0,0,0)
-    # print(img.shape)
     height=img.shape[0]
     width=img.shape[1]
     points=[]
@@ -103,10 +76,6 @@ def D(img):
     points.append((int(height*3/4),int(width*1/4)))
     points.append((int(height*1/4),int(width*1/4)))
     
-    # for i in range(3):
-    #     cv2.line(img,points[i],points[i+1],(b,g,r),thickness_const)
-    #     # cv2.imshow("img",img)
-    #     printFull()
     return points
 
 # master generator function
@@ -121,7 +90,6 @@ def generator(img,order=1,draw="A"):
         return (0,0)
     height=img.shape[0]
     width=img.shape[1]
-    # cv2.rectangle(img,(0,0),(height,width),(255,255,0),5)
     switcher={
         "A":A,
         "B":B,
@@ -138,13 +106,11 @@ def generator(img,order=1,draw="A"):
             b+=1
             b%=255
         point=func(img)
-        # print(points)
         return point
     if order>1:
         half_h=int(height/2)
         half_w=int(width/2)
         if draw=="A":
-            # cv2.rectangle(img,(half_h,0),(half_h,half_w),(255,255,255),-1)
             points=generator(img[half_h:,:half_w],order-1,draw="D")
             if points!=[]:
                  for point in points:
@@ -162,8 +128,6 @@ def generator(img,order=1,draw="A"):
                  for point in points:
                     all_points.append((point[0]+half_w,point[1]+half_h))
 
-            # for i in range(len(all_points)-1):
-            #      cv2.line(img,all_points[i],all_points[i+1],(255,255,255),thickness_const*12)
         elif draw=="B":
             points=generator(img[:half_h,half_w:],order-1,draw="C")
             if points!=[]:
@@ -223,12 +187,6 @@ if __name__ == "__main__":
     global thickness_const
     global delay,animation
     global r,g,b,gredient
-    
-    # global count
-    # count=1
-    # global version
-    # version=0
-
      
     # constants which determine behaviour of the program
     # ----------------------------------------------------------------
@@ -266,14 +224,9 @@ if __name__ == "__main__":
     img2 = np.zeros((height,width,3), np.uint8)
     img2[:,:]=(0,0,0)
 
-    # global out
-    # out = cv2.VideoWriter('outpy5.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (width,height))
-
-    full_img=img
-    # drawHilbert(img,order=5)
+    # full_img=np.zeros((height+50,width,3), np.uint8)
     for j in range(1,10):
-        # filename='hilbertCurve/order/'+str(count)+'.jpg'
-        # count+=1
+        # filename='small_order'+str(j)+'.jpg'
         # text to print order of hilbert curve   
         # _______________________________________________________________________
         img[:50,:500]=(0,0,0)
@@ -288,9 +241,8 @@ if __name__ == "__main__":
 
         # hilbert curve generator
         points=generator(img2,j,"A")
-        # print(points)
+
         for i in range(len(points)-1):
-            # print(points[i])
             rgb=colorsys.hsv_to_rgb(points[i+1][0]/width, (points[i+1][1]/height)%1, 1)
             r=rgb[0]*255
             g=rgb[1]*255
@@ -299,12 +251,7 @@ if __name__ == "__main__":
             k='w'
             if animation:
                 cv2.imshow("img2",img2)
-                # cv2.imshow("img",full_img)
                 k=cv2.waitKey(delay)
-                # writer.append_data(full_img)
-                # cv2.imwrite(filename,full_img)
-                # if version%count==0:
-                #     out.write(img)
             if k==ord('q'):
                 exit()
             if k==ord(' '):
@@ -312,15 +259,17 @@ if __name__ == "__main__":
         # text to print order of hilbert curve and process DONE    
         # _______________________________________________________________________
         img[:50,:500]=(0,0,0)
-        cv2.putText(img,'order :-'+str(j)+"   done", bottomLeftCornerOfText, font, 
+        cv2.putText(img,'order :-'+str(j)+"", bottomLeftCornerOfText, font, 
             fontScale,
             fontColor,
             lineType,cv2.LINE_AA)
         # _______________________________________________________________________
-
+        # full_img[:50,:]=img
+        # full_img[50:,:]=img2
+        
         cv2.imshow("order",img[:50,:])
         cv2.imshow("img2",img2)
-        # cv2.imwrite(filename,img)
+        # cv2.imwrite(filename,full_img)
         # out.write(img)
         k=cv2.waitKey()
         if k==ord('q'):
