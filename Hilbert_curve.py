@@ -276,8 +276,6 @@ if __name__ == "__main__":
             exit()
         if k ==ord(' '):
             animation=True
-        # version=0
-        # count+=10
         # line thickness decrement by 50%
         thickness_const-=int(thickness_const*thickness_decent_content)
         if thickness_const<2:
